@@ -5,12 +5,25 @@ const fetchData = async(searchInput) => {
             s: searchInput
         }
     });
-    console.log(response.data)
+
+    if (response.data.Error) {
+        return [];
+    }
+
+    return response.data.Search;
 }
 
-const onInput = debounce(event => {
-    fetchData(event.target.value)
-}, 500);
+const onInput = async event => {
+    const movies = await fetchData(event.target.value)
+    for (const movie of movies) {
+        const div = document.createElement("div");
+        div.innerHTML = `
+            <img src="${movie.Poster}"/>
+            <h2>${movie.Title}</h2>
+        `
+        document.getElementById("target").appendChild(div);
+    }
+};
 
 const input = document.getElementById("search-bar");
-input.addEventListener("input", onInput);
+input.addEventListener("input", debounce(onInput, 500));
