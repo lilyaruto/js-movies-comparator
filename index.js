@@ -13,13 +13,26 @@ const fetchData = async(searchInput) => {
     return response.data.Search;
 }
 
+const root = document.querySelector(".root");
+root.innerHTML = `
+    <label>Find your film</label>
+    <input type="text" name="" id="search-bar">
+    <div class="dropdown is-active">
+    <div class="dropdown-menu" id="dropdown-menu" role="menu">
+      <div id="target" class="dropdown-content"></div>
+    </div>
+  </div>
+`;
+
 const onInput = async event => {
     const movies = await fetchData(event.target.value)
     for (const movie of movies) {
         const div = document.createElement("div");
         div.innerHTML = `
-            <img src="${movie.Poster}"/>
-            <h2>${movie.Title}</h2>
+            <a href="#" class="dropdown-item">
+                <img src="${movie.Poster}"/>
+                <h2>${movie.Title}</h2>
+            </a>
         `
         document.getElementById("target").appendChild(div);
     }
