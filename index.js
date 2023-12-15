@@ -19,21 +19,24 @@ root.innerHTML = `
     <input type="text" name="" id="search-bar">
     <div class="dropdown">
     <div class="dropdown-menu" id="dropdown-menu" role="menu">
-      <div id="target" class="dropdown-content"></div>
+      <div id="target" class="dropdown-content results"></div>
     </div>
   </div>
 `;
 
 const dropdown = document.querySelector(".dropdown");
+const results = document.querySelector(".results");
 
 const onInput = async event => {
-    const movies = await fetchData(event.target.value)
+    const movies = await fetchData(event.target.value);
+    results.innerHTML = "";
     dropdown.classList.add("is-active");
     for (const movie of movies) {
         const option = document.createElement("a");
+        const imgSrc = movie.Poster === "N/A" ? "" : movie.Poster;
         option.classList.add("dropdown-item");
         option.innerHTML = `
-            <img src="${movie.Poster}"/>
+            <img src="${imgSrc}"/>
             <h2>${movie.Title}</h2>
         `
         document.getElementById("target").appendChild(option);
