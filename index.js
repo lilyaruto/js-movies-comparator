@@ -26,6 +26,7 @@ root.innerHTML = `
 
 const dropdown = document.querySelector(".dropdown");
 const results = document.querySelector(".results");
+const input = document.getElementById("search-bar");
 
 const onInput = async event => {
     const movies = await fetchData(event.target.value);
@@ -45,6 +46,10 @@ const onInput = async event => {
             <img src="${imgSrc}"/>
             <h2>${movie.Title}</h2>
         `
+        option.addEventListener("click", event => {
+            dropdown.classList.remove("is-active");
+            input.value = movie.Title;
+        });
         document.getElementById("target").appendChild(option);
     }
 };
@@ -55,5 +60,4 @@ document.addEventListener('click', event => {
     }
 });
 
-const input = document.getElementById("search-bar");
 input.addEventListener("input", debounce(onInput, 500));
