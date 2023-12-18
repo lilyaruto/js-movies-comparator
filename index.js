@@ -43,5 +43,11 @@ const onInput = async event => {
     }
 };
 
+document.addEventListener('click', event => {
+    if (!root.contains(event.target)) {
+        dropdown.classList.remove("is-active");
+    }
+});
+
 const input = document.getElementById("search-bar");
 input.addEventListener("input", debounce(onInput, 500));
