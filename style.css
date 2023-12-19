@@ -48,7 +48,42 @@ figure .image img {
 }
 
 .root {
-  width: 250px;
+  width: 550px;
   display: flex;
   flex-direction: column;
+}
+
+.movie-desc {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(231, 244, 248);
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.movie-desc-upper {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+h4 {
+  font-weight: bold;
+}
+
+.movie-desc-poster {
+  width: 200px;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.movie-desc-title {
+  font-weight: bold;
+  font-size: 28px;
+}
+
+.movie-desc-add:not(:last-child) {
+  margin-bottom: 10px;
 }
