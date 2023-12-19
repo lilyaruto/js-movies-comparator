@@ -47,7 +47,7 @@ figure .image img {
   margin-right: 10px;
 }
 
-.root {
+.find-box {
   width: 550px;
   display: flex;
   flex-direction: column;
