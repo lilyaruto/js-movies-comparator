@@ -30,7 +30,7 @@ createAutoComplete({
     root: document.querySelector(".search-left"),
     onSelect(movie) {
         document.querySelector(".hint-field").classList.add("is-hidden");
-        onMovieSelection(movie, document.querySelector("#summary-left"));
+        onMovieSelection(movie, document.querySelector("#summary-left"), "left");
     }
 });
 
@@ -39,11 +39,14 @@ createAutoComplete({
     root: document.querySelector(".search-right"),
     onSelect(movie) {
         document.querySelector(".hint-field").classList.add("is-hidden");
-        onMovieSelection(movie, document.querySelector("#summary-right"));
+        onMovieSelection(movie, document.querySelector("#summary-right"), "right");
     }
 });
 
-const onMovieSelection = async(movie, summaryElement) => {
+let leftMovie;
+let rightMovie;
+
+const onMovieSelection = async(movie, summaryElement, side) => {
     const response = await axios.get("http://www.omdbapi.com/", {
         params: {
             apikey: "80f0e4df",
@@ -51,9 +54,47 @@ const onMovieSelection = async(movie, summaryElement) => {
         }
     });
     summaryElement.innerHTML = movieDescTemplate(response.data);
+
+    if (side === "left") {
+        leftMovie = summaryElement;
+    } else {
+        rightMovie = summaryElement;
+    }
+
+    if (leftMovie && rightMovie) {
+        compare(leftMovie, rightMovie);
+    }
 };
 
+const compare = (left, right) => {
+    const paramsL = left.querySelectorAll(".movie-desc-add")
+    const paramsR = right.querySelectorAll(".movie-desc-add")
+    paramsL.forEach((element, index) => {
+        if (parseFloat(element.dataset.value) > parseFloat(paramsR[index].dataset.value)) {
+            element.classList.remove("loss");
+            element.classList.add("win");
+            paramsR[index].classList.remove("win");
+            paramsR[index].classList.add("loss");
+        } else if (parseFloat(element.dataset.value) < parseFloat(paramsR[index].dataset.value)) {
+            element.classList.remove("win");
+            element.classList.add("loss");
+            paramsR[index].classList.remove("loss");
+            paramsR[index].classList.add("win");
+        }
+    });
+}
+
 const movieDescTemplate = (movieInfo) => {
+    console.log(movieInfo)
+    let box_office;
+    if (!movieInfo.BoxOffice) {
+        box_office = 0;
+    } else {
+        box_office = movieInfo.BoxOffice === "N/A" ? 0 : parseInt(movieInfo.BoxOffice.replace("$", "").replaceAll(",", ""));
+    }
+    const rate = movieInfo.imdbRating === "N/A" ? 0 : parseFloat(movieInfo.imdbRating);
+    const metascore = movieInfo.Metascore === "N/A" ? 0 : parseInt(movieInfo.Metascore);
+
     return `
         <article class="movie-desc">
             <div class="movie-desc-upper">
@@ -65,7 +106,7 @@ const movieDescTemplate = (movieInfo) => {
                 </div>
             </div>
             <div>
-                <div class="movie-desc-add">
+                <div data-value=${box_office} class="movie-desc-add">
                     <h4>${movieInfo.BoxOffice}</h4>
                     <span>Box office</span>
                 </div>
@@ -73,11 +114,11 @@ const movieDescTemplate = (movieInfo) => {
                     <h4>${movieInfo.Awards}</h4>
                     <span>Awards</span>
                 </div>
-                <div class="movie-desc-add">
+                <div data-value=${rate} class="movie-desc-add">
                     <h4>${movieInfo.imdbRating}</h4>
                     <span>IMDB Rating</span>
                 </div>
-                <div class="movie-desc-add">
+                <div data-value=${metascore} class="movie-desc-add">
                     <h4>${movieInfo.Metascore}</h4>
                     <span>Metascore</span>
                 </div>
