@@ -1,3 +1,7 @@
+body {
+  font-size: 18px;
+}
+
 .tutorial {
   width: 600px;
   text-align: center;
@@ -47,10 +51,29 @@ figure .image img {
   margin-right: 10px;
 }
 
+.column {
+  margin: 0 auto;
+  max-width: 600px;
+}
+
 .find-box {
-  width: 550px;
   display: flex;
   flex-direction: column;
+}
+
+.search-bar {
+  background-color: rgb(240, 240, 240);
+  border: none;
+  font-size: 24px;
+  border-radius: 10px;
+  padding: 10px;
+  transition: all 0.3s;
+}
+
+.search-bar:focus {
+  transition: all 0.3s;
+  background-color: rgb(223, 223, 223);
+  outline: none;
 }
 
 .movie-desc {
@@ -60,7 +83,6 @@ figure .image img {
   padding: 20px;
   border-radius: 10px;
   margin-top: 20px;
-  font-size: 18px;
 }
 
 .movie-desc-upper {
@@ -86,4 +108,14 @@ h4 {
 
 .movie-desc-add:not(:last-child) {
   margin-bottom: 10px;
+}
+
+.hint-field {
+  margin: 0 auto;
+  width: 500px;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(142, 187, 231);
 }

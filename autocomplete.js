@@ -7,7 +7,6 @@ const createAutoComplete = ({root, renderOption, onSelect, inputValue, fetchData
             <div id="target" class="dropdown-content results"></div>
             </div>
         </div>
-        <div id="summary"></div>
     `;
 
     const dropdown = root.querySelector(".dropdown");

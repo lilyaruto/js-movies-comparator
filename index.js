@@ -1,16 +1,12 @@
-createAutoComplete({
-    root: document.querySelector(".root"),
-    renderOption: (movie) => {
+const autoCompleteParams = {
+    renderOption(movie) {
         const imgSrc = movie.Poster === "N/A" ? "" : movie.Poster;
         return `
             <img src="${imgSrc}"/>
             <h2>${movie.Title}</h2>
         `;
     },
-    onSelect: (movie) => {
-        onMovieSelection(movie);
-    },
-    inputValue: (movie) => {
+    inputValue(movie) {
         return movie.Title;
     },
     async fetchData(searchInput) {
@@ -27,48 +23,34 @@ createAutoComplete({
     
         return response.data.Search;
     }
-});
+};
 
 createAutoComplete({
-    root: document.querySelector(".root-2"),
-    renderOption: (movie) => {
-        const imgSrc = movie.Poster === "N/A" ? "" : movie.Poster;
-        return `
-            <img src="${imgSrc}"/>
-            <h2>${movie.Title}</h2>
-        `;
-    },
-    onSelect: (movie) => {
-        onMovieSelection(movie);
-    },
-    inputValue: (movie) => {
-        return movie.Title;
-    },
-    async fetchData(searchInput) {
-        const response = await axios.get("http://www.omdbapi.com/", {
-            params: {
-                apikey: "80f0e4df",
-                s: searchInput
-            }
-        });
-    
-        if (response.data.Error) {
-            return [];
-        }
-    
-        return response.data.Search;
+    ...autoCompleteParams,
+    root: document.querySelector(".search-left"),
+    onSelect(movie) {
+        document.querySelector(".hint-field").classList.add("is-hidden");
+        onMovieSelection(movie, document.querySelector("#summary-left"));
     }
 });
 
-const onMovieSelection = async(movie) => {
+createAutoComplete({
+    ...autoCompleteParams,
+    root: document.querySelector(".search-right"),
+    onSelect(movie) {
+        document.querySelector(".hint-field").classList.add("is-hidden");
+        onMovieSelection(movie, document.querySelector("#summary-right"));
+    }
+});
+
+const onMovieSelection = async(movie, summaryElement) => {
     const response = await axios.get("http://www.omdbapi.com/", {
         params: {
             apikey: "80f0e4df",
             i: movie.imdbID
         }
     });
-    console.log(response.data);
-    document.querySelector("#summary").innerHTML = movieDescTemplate(response.data);
+    summaryElement.innerHTML = movieDescTemplate(response.data);
 };
 
 const movieDescTemplate = (movieInfo) => {
